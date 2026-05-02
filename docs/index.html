@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Duke University — Fintech 533">
+<meta name="author" content="Logan Ye &amp; Xiaoyu Chen | Duke University — Fintech 533">
 <meta name="dcterms.date" content="2026-05-02">
 
 <title>Energy Sector Pairs Trading – Energy Pairs Trading</title>
@@ -41,7 +41,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -147,7 +147,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Duke University — Fintech 533 </p>
+             <p>Logan Ye &amp; Xiaoyu Chen | Duke University — Fintech 533 </p>
           </div>
   </div>
     
@@ -405,6 +405,97 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 </section>
+<section id="extended-trade-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="extended-trade-statistics">Extended Trade Statistics</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Avg win per trade</td>
+<td>+1.182%</td>
+</tr>
+<tr class="even">
+<td>Avg loss per trade</td>
+<td>-2.325%</td>
+</tr>
+<tr class="odd">
+<td>Profit factor</td>
+<td>0.508</td>
+</tr>
+<tr class="even">
+<td>Max consecutive losses</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exit type breakdown:</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Exit Type</th>
+<th>Count</th>
+<th>Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mean reversion</td>
+<td>6</td>
+<td>100%</td>
+</tr>
+<tr class="even">
+<td>Stop-loss</td>
+<td>0</td>
+<td>0%</td>
+</tr>
+<tr class="odd">
+<td>End of backtest</td>
+<td>0</td>
+<td>0%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Per-pair breakdown:</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Pair</th>
+<th>Trades</th>
+<th>Wins</th>
+<th>Losses</th>
+<th>Avg Return</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SLB/HAL</td>
+<td>3</td>
+<td>1</td>
+<td>2</td>
+<td>-1.657%</td>
+</tr>
+<tr class="even">
+<td>PSX/VLO</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>+0.514%</td>
+</tr>
+<tr class="odd">
+<td>XOM/CVX</td>
+<td>0</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="equity-curves-drawdown" class="level3">
 <h3 class="anchored" data-anchor-id="equity-curves-drawdown">Equity Curves &amp; Drawdown</h3>
 <div class="quarto-figure quarto-figure-center">
@@ -580,7 +671,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="code" class="level2">
 <h2 class="anchored" data-anchor-id="code">Code</h2>
-<p>Full source code available in the <a href="https://github.com">GitHub repository</a>. The main notebook <code>pairs_trading.ipynb</code> connects to IBKR via ShinyBroker to fetch historical data, runs the backtest, and generates <code>trades.csv</code> and <code>ledger.csv</code>.</p>
+<p>Full source code available in the <a href="https://github.com/StarvingBaby/533_Final_Pairs_Trading">GitHub repository</a>. The main notebook <code>backtest.ipynb</code> connects to IBKR via ShinyBroker to fetch historical data, runs the backtest, and generates <code>trades.csv</code> and <code>ledger.csv</code>.</p>
 <hr>
 </section>
 <section id="strategy-monitoring" class="level2">

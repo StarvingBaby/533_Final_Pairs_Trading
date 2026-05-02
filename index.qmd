@@ -1,7 +1,7 @@
 ---
 title: "Energy Sector Pairs Trading"
 subtitle: "Statistical arbitrage across the energy value chain — SLB/HAL · PSX/VLO · XOM/CVX"
-author: "Duke University — Fintech 533"
+author: "Logan Ye & Xiaoyu Chen | Duke University — Fintech 533"
 date: today
 format:
   html:
@@ -244,8 +244,8 @@ was unfavorable for several trades.
 ## Code
 
 Full source code available in the
-[GitHub repository](https://github.com).
-The main notebook `pairs_trading.ipynb` connects to IBKR via ShinyBroker
+[GitHub repository](https://github.com/StarvingBaby/533_Final_Pairs_Trading).
+The main notebook `backtest.ipynb` connects to IBKR via ShinyBroker
 to fetch historical data, runs the backtest, and generates `trades.csv`
 and `ledger.csv`.
 

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -74,7 +74,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -163,16 +163,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#section-8-performance-metrics" id="toc-section-8-performance-metrics" class="nav-link" data-scroll-target="#section-8-performance-metrics">Section 8 — Performance Metrics</a></li>
   <li><a href="#section-8b-extended-statistics" id="toc-section-8b-extended-statistics" class="nav-link" data-scroll-target="#section-8b-extended-statistics">Section 8b — Extended Statistics</a></li>
   <li><a href="#section-9-plots" id="toc-section-9-plots" class="nav-link" data-scroll-target="#section-9-plots">Section 9 — Plots</a></li>
-  <li><a href="#section-10-discussion" id="toc-section-10-discussion" class="nav-link" data-scroll-target="#section-10-discussion">Section 10 — Discussion</a></li>
-  <li><a href="#strategy-overview" id="toc-strategy-overview" class="nav-link" data-scroll-target="#strategy-overview">1. STRATEGY OVERVIEW</a></li>
-  <li><a href="#pair-selection-statistical-validation" id="toc-pair-selection-statistical-validation" class="nav-link" data-scroll-target="#pair-selection-statistical-validation">2. PAIR SELECTION &amp; STATISTICAL VALIDATION</a></li>
-  <li><a href="#backtest-results-2025-03-03-to-2026-05-01" id="toc-backtest-results-2025-03-03-to-2026-05-01" class="nav-link" data-scroll-target="#backtest-results-2025-03-03-to-2026-05-01">3. BACKTEST RESULTS (2025-03-03 to 2026-05-01)</a></li>
-  <li><a href="#entry-exit-rules" id="toc-entry-exit-rules" class="nav-link" data-scroll-target="#entry-exit-rules">4. ENTRY &amp; EXIT RULES</a></li>
-  <li><a href="#trade-fates" id="toc-trade-fates" class="nav-link" data-scroll-target="#trade-fates">5. TRADE FATES</a></li>
-  <li><a href="#how-do-we-know-the-strategy-is-performing-as-expected" id="toc-how-do-we-know-the-strategy-is-performing-as-expected" class="nav-link" data-scroll-target="#how-do-we-know-the-strategy-is-performing-as-expected">6. HOW DO WE KNOW THE STRATEGY IS PERFORMING AS EXPECTED?</a></li>
-  <li><a href="#how-do-we-know-when-the-strategy-stops-working" id="toc-how-do-we-know-when-the-strategy-stops-working" class="nav-link" data-scroll-target="#how-do-we-know-when-the-strategy-stops-working">7. HOW DO WE KNOW WHEN THE STRATEGY STOPS WORKING?</a></li>
-  <li><a href="#risks" id="toc-risks" class="nav-link" data-scroll-target="#risks">8. RISKS</a></li>
-  <li><a href="#how-to-improve" id="toc-how-to-improve" class="nav-link" data-scroll-target="#how-to-improve">9. HOW TO IMPROVE</a></li>
+  <li><a href="#section-10-discussion" id="toc-section-10-discussion" class="nav-link" data-scroll-target="#section-10-discussion">Section 10 — Discussion</a>
+  <ul class="collapse">
+  <li><a href="#strategy-overview" id="toc-strategy-overview" class="nav-link" data-scroll-target="#strategy-overview">Strategy Overview</a></li>
+  <li><a href="#statistical-validation" id="toc-statistical-validation" class="nav-link" data-scroll-target="#statistical-validation">Statistical Validation</a></li>
+  <li><a href="#backtest-results" id="toc-backtest-results" class="nav-link" data-scroll-target="#backtest-results">Backtest Results</a></li>
+  <li><a href="#key-risks" id="toc-key-risks" class="nav-link" data-scroll-target="#key-risks">Key Risks</a></li>
+  <li><a href="#how-to-improve" id="toc-how-to-improve" class="nav-link" data-scroll-target="#how-to-improve">How to Improve</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -256,46 +254,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="section-2-data-fetching">Section 2 — Data Fetching</h2>
 <p>Pulls daily closing prices for all 6 tickers via IBKR/ShinyBroker. Make sure TWS or Gateway is running on port 7497 before executing.</p>
 <div id="fd000ead" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shinybroker <span class="im">as</span> sb</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>HOST      <span class="op">=</span> <span class="st">'127.0.0.1'</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>PORT      <span class="op">=</span> <span class="dv">7497</span>        <span class="co"># TWS paper trading</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>CLIENT_ID <span class="op">=</span> <span class="dv">9999</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_contract(sym):</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sb.Contract({</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">'symbol'</span>: sym,</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">'secType'</span>: <span class="st">'STK'</span>,</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">'exchange'</span>: <span class="st">'SMART'</span>,</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">'currency'</span>: <span class="st">'USD'</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fetch_daily(sym, duration<span class="op">=</span><span class="st">'3 Y'</span>):</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> sb.fetch_historical_data(</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        contract<span class="op">=</span>make_contract(sym),</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        durationStr<span class="op">=</span>duration,</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        barSizeSetting<span class="op">=</span><span class="st">'1 day'</span>,</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        whatToShow<span class="op">=</span><span class="st">'Trades'</span>,</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        useRTH<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        host<span class="op">=</span>HOST,</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        port<span class="op">=</span>PORT,</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        client_id<span class="op">=</span>CLIENT_ID,</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        timeout<span class="op">=</span><span class="dv">60</span>,</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    )[<span class="st">'hst_dta'</span>]</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">'timestamp'</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">'timestamp'</span>])</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.set_index(<span class="st">'timestamp'</span>)[[<span class="st">'close'</span>]].rename(columns<span class="op">=</span>{<span class="st">'close'</span>: sym})</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>tickers <span class="op">=</span> <span class="bu">list</span>(<span class="bu">set</span>(t <span class="cf">for</span> a, b, _ <span class="kw">in</span> PAIRS <span class="cf">for</span> t <span class="kw">in</span> [a, b]))</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Fetching </span><span class="sc">{</span><span class="bu">len</span>(tickers)<span class="sc">}</span><span class="ss"> tickers...'</span>)</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> {}</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sym <span class="kw">in</span> tickers:</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    raw[sym] <span class="op">=</span> fetch_daily(sym)</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'  v </span><span class="sc">{</span>sym<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>all_prices <span class="op">=</span> pd.concat(raw.values(), axis<span class="op">=</span><span class="dv">1</span>).dropna()</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'</span><span class="ch">\n</span><span class="sc">{</span><span class="bu">len</span>(all_prices)<span class="sc">}</span><span class="ss"> trading days  (</span><span class="sc">{</span>all_prices<span class="sc">.</span>index[<span class="dv">0</span>]<span class="sc">.</span>date()<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>all_prices<span class="sc">.</span>index[<span class="op">-</span><span class="dv">1</span>]<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">)'</span>)</span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>all_prices.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>HOST      <span class="op">=</span> <span class="st">'127.0.0.1'</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>PORT      <span class="op">=</span> <span class="dv">7497</span>        <span class="co"># TWS paper trading</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>CLIENT_ID <span class="op">=</span> <span class="dv">9999</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_contract(sym):</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sb.Contract({</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">'symbol'</span>: sym,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">'secType'</span>: <span class="st">'STK'</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">'exchange'</span>: <span class="st">'SMART'</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">'currency'</span>: <span class="st">'USD'</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fetch_daily(sym, duration<span class="op">=</span><span class="st">'3 Y'</span>):</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> sb.fetch_historical_data(</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        contract<span class="op">=</span>make_contract(sym),</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        durationStr<span class="op">=</span>duration,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        barSizeSetting<span class="op">=</span><span class="st">'1 day'</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        whatToShow<span class="op">=</span><span class="st">'Trades'</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        useRTH<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        host<span class="op">=</span>HOST,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        port<span class="op">=</span>PORT,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        client_id<span class="op">=</span>CLIENT_ID,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        timeout<span class="op">=</span><span class="dv">60</span>,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    )[<span class="st">'hst_dta'</span>]</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">'timestamp'</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">'timestamp'</span>])</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.set_index(<span class="st">'timestamp'</span>)[[<span class="st">'close'</span>]].rename(columns<span class="op">=</span>{<span class="st">'close'</span>: sym})</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>tickers <span class="op">=</span> <span class="bu">list</span>(<span class="bu">set</span>(t <span class="cf">for</span> a, b, _ <span class="kw">in</span> PAIRS <span class="cf">for</span> t <span class="kw">in</span> [a, b]))</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Fetching </span><span class="sc">{</span><span class="bu">len</span>(tickers)<span class="sc">}</span><span class="ss"> tickers...'</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> {}</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sym <span class="kw">in</span> tickers:</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    raw[sym] <span class="op">=</span> fetch_daily(sym)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'  v </span><span class="sc">{</span>sym<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>all_prices <span class="op">=</span> pd.concat(raw.values(), axis<span class="op">=</span><span class="dv">1</span>).dropna()</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'</span><span class="ch">\n</span><span class="sc">{</span><span class="bu">len</span>(all_prices)<span class="sc">}</span><span class="ss"> trading days  (</span><span class="sc">{</span>all_prices<span class="sc">.</span>index[<span class="dv">0</span>]<span class="sc">.</span>date()<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>all_prices<span class="sc">.</span>index[<span class="op">-</span><span class="dv">1</span>]<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">)'</span>)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>all_prices.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Fetching 6 tickers...
   v SLB
@@ -1284,63 +1280,69 @@ Per-Pair Exit Breakdown
 </section>
 <section id="section-10-discussion" class="level2">
 <h2 class="anchored" data-anchor-id="section-10-discussion">Section 10 — Discussion</h2>
-<p>Summary of strategy design decisions, statistical validation results, backtest performance, and risk factors. ==========</p>
-</section>
-<section id="strategy-overview" class="level2">
-<h2 class="anchored" data-anchor-id="strategy-overview">1. STRATEGY OVERVIEW</h2>
+<section id="strategy-overview" class="level3">
+<h3 class="anchored" data-anchor-id="strategy-overview">Strategy Overview</h3>
 <p>We ran a pairs trading strategy across three energy sector pairs simultaneously: SLB/HAL (oilfield services), PSX/VLO (refining), and XOM/CVX (integrated majors). All three pairs are driven by the same macro environment — oil prices, energy demand, and upstream capex cycles — but react differently in the short term, creating tradeable spreads.</p>
 <p>The key design choice was a 60-day rolling OLS hedge ratio instead of a static formation-period estimate. This allows the strategy to adapt as the relative valuation between the two companies shifts over time.</p>
 </section>
-<section id="pair-selection-statistical-validation" class="level2">
-<h2 class="anchored" data-anchor-id="pair-selection-statistical-validation">2. PAIR SELECTION &amp; STATISTICAL VALIDATION</h2>
-<p>Formation period: 2024-03-01 to 2025-03-01</p>
-<p>SLB/HAL: Correlation 0.92, EG p=0.061 (10% level), ADF p=0.040 (5% level) PASS PSX/VLO: Correlation 0.93, EG p=0.140 (marginal), ADF p=0.048 (5% level) PASS XOM/CVX: Correlation 0.31, EG p=0.307 (marginal), ADF p=0.132 FAIL</p>
-<p>SLB/HAL and PSX/VLO both pass the ADF test at the 5% level, confirming the spread is stationary and mean-reverting. Engle-Granger is marginal for both, which we attribute to the relatively short formation window (232 days). XOM/CVX is the weakest pair statistically but is included for portfolio breadth and its strong economic rationale.</p>
+<section id="statistical-validation" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-validation">Statistical Validation</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Pair</th>
+<th>EG p-value</th>
+<th>ADF p-value</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SLB/HAL</td>
+<td>0.061</td>
+<td>0.040</td>
+<td>ADF pass at 5%</td>
+</tr>
+<tr class="even">
+<td>PSX/VLO</td>
+<td>0.140</td>
+<td>0.048</td>
+<td>ADF pass at 5%</td>
+</tr>
+<tr class="odd">
+<td>XOM/CVX</td>
+<td>0.307</td>
+<td>0.132</td>
+<td>Both marginal</td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="backtest-results-2025-03-03-to-2026-05-01" class="level2">
-<h2 class="anchored" data-anchor-id="backtest-results-2025-03-03-to-2026-05-01">3. BACKTEST RESULTS (2025-03-03 to 2026-05-01)</h2>
-<p>Portfolio total return : -1.44% Portfolio Sharpe ratio : -0.351 Max drawdown : -3.42% Total trades : 6 (all mean reversion exits, 0 stop-loss) Win rate : 50% Expected return/trade : -0.571%</p>
-<p>SLB/HAL was the main drag (-5.29%), losing 2 of 3 trades. PSX/VLO was the best performer (+0.99%, win rate 66.7%). XOM/CVX generated no signals throughout the backtest — the z-score never crossed ±2.0, meaning the spread remained relatively stable and within normal range.</p>
-<p>All 6 trades exited via mean reversion (z-score crossed 0), with no stop-loss triggers. This confirms the spread does eventually revert, but the timing and direction of initial entry were unfavorable for SLB/HAL.</p>
-<p>Notably, all 6 trades were long spread (z-score &lt; -2.0), meaning the spread was consistently below its historical mean during this period. This suggests a systematic downward drift in the spread — a sign of potential cointegration breakdown or a structural shift in the relative valuation of these pairs.</p>
+<section id="backtest-results" class="level3">
+<h3 class="anchored" data-anchor-id="backtest-results">Backtest Results</h3>
+<p>Portfolio total return: -1.44% over 294 trading days. PSX/VLO was the best performer (+0.99%, 2/3 wins). SLB/HAL was the main drag (-5.29%, 1/3 wins). XOM/CVX generated no signals — z-score never crossed ±2.0.</p>
+<p>All 6 trades exited via mean reversion with zero stop-loss triggers, confirming the spread does eventually revert. The one-sided signal direction (all long spread) suggests a systematic downward drift in the spread during the backtest period.</p>
 </section>
-<section id="entry-exit-rules" class="level2">
-<h2 class="anchored" data-anchor-id="entry-exit-rules">4. ENTRY &amp; EXIT RULES</h2>
-<p>Entry : z-score crosses ±2.0 (1 std above common starting point) Exit : z-score reverts to 0 (full mean reversion) Stop : |z-score| exceeds 4.0 (cointegration breakdown protection)</p>
-<p>We chose ±2.0 because it filters out daily noise while still generating enough trades over a year-long backtest. A tighter threshold (e.g.&nbsp;±1.5) would generate more trades but also more false signals.</p>
-</section>
-<section id="trade-fates" class="level2">
-<h2 class="anchored" data-anchor-id="trade-fates">5. TRADE FATES</h2>
-<p>Mean reversion : 6 trades (100%) — spread reverted as expected Stop-loss : 0 trades (0%) — no extreme spread movements End of backtest: 0 trades (0%) — all positions closed before end</p>
-</section>
-<section id="how-do-we-know-the-strategy-is-performing-as-expected" class="level2">
-<h2 class="anchored" data-anchor-id="how-do-we-know-the-strategy-is-performing-as-expected">6. HOW DO WE KNOW THE STRATEGY IS PERFORMING AS EXPECTED?</h2>
-<p>We monitor two metrics on a rolling 60-day basis: - Rolling Sharpe ratio: if it drops below -0.5, strategy is underperforming - Z-score crossing rate: if z-scores rarely cross 0, spread is trending rather than mean-reverting — cointegration may have broken down</p>
-</section>
-<section id="how-do-we-know-when-the-strategy-stops-working" class="level2">
-<h2 class="anchored" data-anchor-id="how-do-we-know-when-the-strategy-stops-working">7. HOW DO WE KNOW WHEN THE STRATEGY STOPS WORKING?</h2>
-<p>Two clear signals: 1. Stop-loss rate exceeds 50% of all trades — spread trending against us 2. Rolling hedge ratio drifts more than 30% from formation-period estimate — fundamental relationship between the two companies has changed</p>
-<p>At that point we re-run the screener on a fresh formation window and either update parameters or switch to a different pair.</p>
-</section>
-<section id="risks" class="level2">
-<h2 class="anchored" data-anchor-id="risks">8. RISKS</h2>
+<section id="key-risks" class="level3">
+<h3 class="anchored" data-anchor-id="key-risks">Key Risks</h3>
 <ul>
-<li>Sector concentration: all three pairs are in energy — a sector-wide shock could blow out all three spreads simultaneously</li>
-<li>Weak cointegration: XOM/CVX failed statistical tests — highest risk pair</li>
-<li>Systematic spread drift: all trades were long spread, suggesting the spread has a directional bias during this period rather than pure mean reversion</li>
-<li>Small sample: 6 trades over 294 days is insufficient for strong conclusions about strategy performance</li>
+<li><strong>Sector concentration:</strong> All three pairs are in energy — correlated drawdowns</li>
+<li><strong>Weak cointegration:</strong> XOM/CVX failed statistical tests</li>
+<li><strong>Spread drift:</strong> All trades long spread suggests directional bias</li>
+<li><strong>Small sample:</strong> 6 trades over 294 days limits statistical inference</li>
 </ul>
 </section>
-<section id="how-to-improve" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-improve">9. HOW TO IMPROVE</h2>
+<section id="how-to-improve" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-improve">How to Improve</h3>
 <ul>
-<li>Add pairs from other sectors to reduce energy concentration risk</li>
-<li>Use a regime filter (e.g.&nbsp;avoid trading when VIX &gt; 25)</li>
-<li>Implement partial exits at z=0.5 to lock in profits earlier</li>
-<li>Re-run formation period annually to keep parameters fresh</li>
+<li>Add pairs from other sectors to reduce concentration risk</li>
+<li>Regime filter: avoid trading when VIX &gt; 25</li>
+<li>Partial exits at z = 0.5 to lock in profits earlier</li>
+<li>Re-run formation annually to keep parameters fresh</li>
 </ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

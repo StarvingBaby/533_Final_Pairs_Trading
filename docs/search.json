@@ -39,7 +39,7 @@
     "href": "index.html#results",
     "title": "Energy Sector Pairs Trading",
     "section": "Results",
-    "text": "Results\n\nPerformance Summary\n\n\n\nMetric\nSLB/HAL\nPSX/VLO\nXOM/CVX\nPortfolio\n\n\n\n\nTotal Return\n-5.29%\n+0.99%\n0.00%\n-1.44%\n\n\nAnn. Return\n-4.55%\n+0.84%\n0.00%\n-1.23%\n\n\nSharpe Ratio\n-0.501\n0.198\n0.000\n-0.351\n\n\nMax Drawdown\n-10.08%\n-3.42%\n0.00%\n-3.42%\n\n\nWin Rate\n33.3%\n66.7%\n—\n50.0%\n\n\nAvg Hold (days)\n25.3\n35.3\n—\n30.3\n\n\nTotal Trades\n3\n3\n0\n6\n\n\nStop-loss Exits\n0\n0\n0\n0\n\n\nExp. Return/Trade\n-1.657%\n+0.514%\n—\n-0.571%\n\n\n\n\n\nEquity Curves & Drawdown\n\n\n\nEquity curves, drawdown, z-scores, and trade returns\n\n\n\n\nRolling Hedge Ratio Evolution\n\n\n\n60-day rolling hedge ratio vs static OLS estimate"
+    "text": "Results\n\nPerformance Summary\n\n\n\nMetric\nSLB/HAL\nPSX/VLO\nXOM/CVX\nPortfolio\n\n\n\n\nTotal Return\n-5.29%\n+0.99%\n0.00%\n-1.44%\n\n\nAnn. Return\n-4.55%\n+0.84%\n0.00%\n-1.23%\n\n\nSharpe Ratio\n-0.501\n0.198\n0.000\n-0.351\n\n\nMax Drawdown\n-10.08%\n-3.42%\n0.00%\n-3.42%\n\n\nWin Rate\n33.3%\n66.7%\n—\n50.0%\n\n\nAvg Hold (days)\n25.3\n35.3\n—\n30.3\n\n\nTotal Trades\n3\n3\n0\n6\n\n\nStop-loss Exits\n0\n0\n0\n0\n\n\nExp. Return/Trade\n-1.657%\n+0.514%\n—\n-0.571%\n\n\n\n\n\nExtended Trade Statistics\n\n\n\nMetric\nValue\n\n\n\n\nAvg win per trade\n+1.182%\n\n\nAvg loss per trade\n-2.325%\n\n\nProfit factor\n0.508\n\n\nMax consecutive losses\n2\n\n\n\nExit type breakdown:\n\n\n\nExit Type\nCount\nRate\n\n\n\n\nMean reversion\n6\n100%\n\n\nStop-loss\n0\n0%\n\n\nEnd of backtest\n0\n0%\n\n\n\nPer-pair breakdown:\n\n\n\nPair\nTrades\nWins\nLosses\nAvg Return\n\n\n\n\nSLB/HAL\n3\n1\n2\n-1.657%\n\n\nPSX/VLO\n3\n2\n1\n+0.514%\n\n\nXOM/CVX\n0\n—\n—\n—\n\n\n\n\n\nEquity Curves & Drawdown\n\n\n\nEquity curves, drawdown, z-scores, and trade returns\n\n\n\n\nRolling Hedge Ratio Evolution\n\n\n\n60-day rolling hedge ratio vs static OLS estimate"
   },
   {
     "objectID": "index.html#trade-log",
@@ -67,7 +67,7 @@
     "href": "index.html#code",
     "title": "Energy Sector Pairs Trading",
     "section": "Code",
-    "text": "Code\nFull source code available in the GitHub repository. The main notebook pairs_trading.ipynb connects to IBKR via ShinyBroker to fetch historical data, runs the backtest, and generates trades.csv and ledger.csv."
+    "text": "Code\nFull source code available in the GitHub repository. The main notebook backtest.ipynb connects to IBKR via ShinyBroker to fetch historical data, runs the backtest, and generates trades.csv and ledger.csv."
   },
   {
     "objectID": "index.html#strategy-monitoring",
@@ -95,7 +95,7 @@
     "href": "backtest.html#section-2-data-fetching",
     "title": "Energy Sector Pairs Trading — Backtest Notebook",
     "section": "Section 2 — Data Fetching",
-    "text": "Section 2 — Data Fetching\nPulls daily closing prices for all 6 tickers via IBKR/ShinyBroker. Make sure TWS or Gateway is running on port 7497 before executing.\n\nimport shinybroker as sb\n\nHOST      = '127.0.0.1'\nPORT      = 7497        # TWS paper trading\nCLIENT_ID = 9999\n\ndef make_contract(sym):\n    return sb.Contract({\n        'symbol': sym,\n        'secType': 'STK',\n        'exchange': 'SMART',\n        'currency': 'USD'\n    })\n\ndef fetch_daily(sym, duration='3 Y'):\n    df = sb.fetch_historical_data(\n        contract=make_contract(sym),\n        durationStr=duration,\n        barSizeSetting='1 day',\n        whatToShow='Trades',\n        useRTH=True,\n        host=HOST,\n        port=PORT,\n        client_id=CLIENT_ID,\n        timeout=60,\n    )['hst_dta']\n    df['timestamp'] = pd.to_datetime(df['timestamp'])\n    return df.set_index('timestamp')[['close']].rename(columns={'close': sym})\n\ntickers = list(set(t for a, b, _ in PAIRS for t in [a, b]))\nprint(f'Fetching {len(tickers)} tickers...')\n\nraw = {}\nfor sym in tickers:\n    raw[sym] = fetch_daily(sym)\n    print(f'  v {sym}')\n\nall_prices = pd.concat(raw.values(), axis=1).dropna()\nprint(f'\\n{len(all_prices)} trading days  ({all_prices.index[0].date()} to {all_prices.index[-1].date()})')\nall_prices.head()\n\nFetching 6 tickers...\n  v SLB\n  v PSX\n  v XOM\n  v CVX\n  v VLO\n  v HAL\n\n752 trading days  (2023-05-03 to 2026-05-01)\n\n\n\n\n\n\n\n\n\nSLB\nPSX\nXOM\nCVX\nVLO\nHAL\n\n\ntimestamp\n\n\n\n\n\n\n\n\n\n\n2023-05-03\n45.2700\n95.9500\n107.9300\n156.8300\n107.0600\n29.1500\n\n\n2023-05-04\n45.0700\n92.3100\n106.0400\n156.2200\n104.3100\n29.0200\n\n\n2023-05-05\n45.7500\n93.4400\n108.6800\n160.2100\n107.0400\n29.8800\n\n\n2023-05-08\n46.6100\n93.9600\n109.1100\n159.5800\n107.3800\n29.9500\n\n\n2023-05-09\n47.1700\n93.9800\n109.1400\n159.1200\n108.4000\n30.1000"
+    "text": "Section 2 — Data Fetching\nPulls daily closing prices for all 6 tickers via IBKR/ShinyBroker. Make sure TWS or Gateway is running on port 7497 before executing.\n\nHOST      = '127.0.0.1'\nPORT      = 7497        # TWS paper trading\nCLIENT_ID = 9999\n\ndef make_contract(sym):\n    return sb.Contract({\n        'symbol': sym,\n        'secType': 'STK',\n        'exchange': 'SMART',\n        'currency': 'USD'\n    })\n\ndef fetch_daily(sym, duration='3 Y'):\n    df = sb.fetch_historical_data(\n        contract=make_contract(sym),\n        durationStr=duration,\n        barSizeSetting='1 day',\n        whatToShow='Trades',\n        useRTH=True,\n        host=HOST,\n        port=PORT,\n        client_id=CLIENT_ID,\n        timeout=60,\n    )['hst_dta']\n    df['timestamp'] = pd.to_datetime(df['timestamp'])\n    return df.set_index('timestamp')[['close']].rename(columns={'close': sym})\n\ntickers = list(set(t for a, b, _ in PAIRS for t in [a, b]))\nprint(f'Fetching {len(tickers)} tickers...')\n\nraw = {}\nfor sym in tickers:\n    raw[sym] = fetch_daily(sym)\n    print(f'  v {sym}')\n\nall_prices = pd.concat(raw.values(), axis=1).dropna()\nprint(f'\\n{len(all_prices)} trading days  ({all_prices.index[0].date()} to {all_prices.index[-1].date()})')\nall_prices.head()\n\nFetching 6 tickers...\n  v SLB\n  v PSX\n  v XOM\n  v CVX\n  v VLO\n  v HAL\n\n752 trading days  (2023-05-03 to 2026-05-01)\n\n\n\n\n\n\n\n\n\nSLB\nPSX\nXOM\nCVX\nVLO\nHAL\n\n\ntimestamp\n\n\n\n\n\n\n\n\n\n\n2023-05-03\n45.2700\n95.9500\n107.9300\n156.8300\n107.0600\n29.1500\n\n\n2023-05-04\n45.0700\n92.3100\n106.0400\n156.2200\n104.3100\n29.0200\n\n\n2023-05-05\n45.7500\n93.4400\n108.6800\n160.2100\n107.0400\n29.8800\n\n\n2023-05-08\n46.6100\n93.9600\n109.1100\n159.5800\n107.3800\n29.9500\n\n\n2023-05-09\n47.1700\n93.9800\n109.1400\n159.1200\n108.4000\n30.1000"
   },
   {
     "objectID": "backtest.html#section-3-pair-validation",
@@ -158,69 +158,6 @@
     "href": "backtest.html#section-10-discussion",
     "title": "Energy Sector Pairs Trading — Backtest Notebook",
     "section": "Section 10 — Discussion",
-    "text": "Section 10 — Discussion\nSummary of strategy design decisions, statistical validation results, backtest performance, and risk factors. =========="
-  },
-  {
-    "objectID": "backtest.html#strategy-overview",
-    "href": "backtest.html#strategy-overview",
-    "title": "Energy Sector Pairs Trading — Backtest Notebook",
-    "section": "1. STRATEGY OVERVIEW",
-    "text": "1. STRATEGY OVERVIEW\nWe ran a pairs trading strategy across three energy sector pairs simultaneously: SLB/HAL (oilfield services), PSX/VLO (refining), and XOM/CVX (integrated majors). All three pairs are driven by the same macro environment — oil prices, energy demand, and upstream capex cycles — but react differently in the short term, creating tradeable spreads.\nThe key design choice was a 60-day rolling OLS hedge ratio instead of a static formation-period estimate. This allows the strategy to adapt as the relative valuation between the two companies shifts over time."
-  },
-  {
-    "objectID": "backtest.html#pair-selection-statistical-validation",
-    "href": "backtest.html#pair-selection-statistical-validation",
-    "title": "Energy Sector Pairs Trading — Backtest Notebook",
-    "section": "2. PAIR SELECTION & STATISTICAL VALIDATION",
-    "text": "2. PAIR SELECTION & STATISTICAL VALIDATION\nFormation period: 2024-03-01 to 2025-03-01\nSLB/HAL: Correlation 0.92, EG p=0.061 (10% level), ADF p=0.040 (5% level) PASS PSX/VLO: Correlation 0.93, EG p=0.140 (marginal), ADF p=0.048 (5% level) PASS XOM/CVX: Correlation 0.31, EG p=0.307 (marginal), ADF p=0.132 FAIL\nSLB/HAL and PSX/VLO both pass the ADF test at the 5% level, confirming the spread is stationary and mean-reverting. Engle-Granger is marginal for both, which we attribute to the relatively short formation window (232 days). XOM/CVX is the weakest pair statistically but is included for portfolio breadth and its strong economic rationale."
-  },
-  {
-    "objectID": "backtest.html#backtest-results-2025-03-03-to-2026-05-01",
-    "href": "backtest.html#backtest-results-2025-03-03-to-2026-05-01",
-    "title": "Energy Sector Pairs Trading — Backtest Notebook",
-    "section": "3. BACKTEST RESULTS (2025-03-03 to 2026-05-01)",
-    "text": "3. BACKTEST RESULTS (2025-03-03 to 2026-05-01)\nPortfolio total return : -1.44% Portfolio Sharpe ratio : -0.351 Max drawdown : -3.42% Total trades : 6 (all mean reversion exits, 0 stop-loss) Win rate : 50% Expected return/trade : -0.571%\nSLB/HAL was the main drag (-5.29%), losing 2 of 3 trades. PSX/VLO was the best performer (+0.99%, win rate 66.7%). XOM/CVX generated no signals throughout the backtest — the z-score never crossed ±2.0, meaning the spread remained relatively stable and within normal range.\nAll 6 trades exited via mean reversion (z-score crossed 0), with no stop-loss triggers. This confirms the spread does eventually revert, but the timing and direction of initial entry were unfavorable for SLB/HAL.\nNotably, all 6 trades were long spread (z-score &lt; -2.0), meaning the spread was consistently below its historical mean during this period. This suggests a systematic downward drift in the spread — a sign of potential cointegration breakdown or a structural shift in the relative valuation of these pairs."
-  },
-  {
-    "objectID": "backtest.html#entry-exit-rules",
-    "href": "backtest.html#entry-exit-rules",
-    "title": "Energy Sector Pairs Trading — Backtest Notebook",
-    "section": "4. ENTRY & EXIT RULES",
-    "text": "4. ENTRY & EXIT RULES\nEntry : z-score crosses ±2.0 (1 std above common starting point) Exit : z-score reverts to 0 (full mean reversion) Stop : |z-score| exceeds 4.0 (cointegration breakdown protection)\nWe chose ±2.0 because it filters out daily noise while still generating enough trades over a year-long backtest. A tighter threshold (e.g. ±1.5) would generate more trades but also more false signals."
-  },
-  {
-    "objectID": "backtest.html#trade-fates",
-    "href": "backtest.html#trade-fates",
-    "title": "Energy Sector Pairs Trading — Backtest Notebook",
-    "section": "5. TRADE FATES",
-    "text": "5. TRADE FATES\nMean reversion : 6 trades (100%) — spread reverted as expected Stop-loss : 0 trades (0%) — no extreme spread movements End of backtest: 0 trades (0%) — all positions closed before end"
-  },
-  {
-    "objectID": "backtest.html#how-do-we-know-the-strategy-is-performing-as-expected",
-    "href": "backtest.html#how-do-we-know-the-strategy-is-performing-as-expected",
-    "title": "Energy Sector Pairs Trading — Backtest Notebook",
-    "section": "6. HOW DO WE KNOW THE STRATEGY IS PERFORMING AS EXPECTED?",
-    "text": "6. HOW DO WE KNOW THE STRATEGY IS PERFORMING AS EXPECTED?\nWe monitor two metrics on a rolling 60-day basis: - Rolling Sharpe ratio: if it drops below -0.5, strategy is underperforming - Z-score crossing rate: if z-scores rarely cross 0, spread is trending rather than mean-reverting — cointegration may have broken down"
-  },
-  {
-    "objectID": "backtest.html#how-do-we-know-when-the-strategy-stops-working",
-    "href": "backtest.html#how-do-we-know-when-the-strategy-stops-working",
-    "title": "Energy Sector Pairs Trading — Backtest Notebook",
-    "section": "7. HOW DO WE KNOW WHEN THE STRATEGY STOPS WORKING?",
-    "text": "7. HOW DO WE KNOW WHEN THE STRATEGY STOPS WORKING?\nTwo clear signals: 1. Stop-loss rate exceeds 50% of all trades — spread trending against us 2. Rolling hedge ratio drifts more than 30% from formation-period estimate — fundamental relationship between the two companies has changed\nAt that point we re-run the screener on a fresh formation window and either update parameters or switch to a different pair."
-  },
-  {
-    "objectID": "backtest.html#risks",
-    "href": "backtest.html#risks",
-    "title": "Energy Sector Pairs Trading — Backtest Notebook",
-    "section": "8. RISKS",
-    "text": "8. RISKS\n\nSector concentration: all three pairs are in energy — a sector-wide shock could blow out all three spreads simultaneously\nWeak cointegration: XOM/CVX failed statistical tests — highest risk pair\nSystematic spread drift: all trades were long spread, suggesting the spread has a directional bias during this period rather than pure mean reversion\nSmall sample: 6 trades over 294 days is insufficient for strong conclusions about strategy performance"
-  },
-  {
-    "objectID": "backtest.html#how-to-improve",
-    "href": "backtest.html#how-to-improve",
-    "title": "Energy Sector Pairs Trading — Backtest Notebook",
-    "section": "9. HOW TO IMPROVE",
-    "text": "9. HOW TO IMPROVE\n\nAdd pairs from other sectors to reduce energy concentration risk\nUse a regime filter (e.g. avoid trading when VIX &gt; 25)\nImplement partial exits at z=0.5 to lock in profits earlier\nRe-run formation period annually to keep parameters fresh"
+    "text": "Section 10 — Discussion\n\nStrategy Overview\nWe ran a pairs trading strategy across three energy sector pairs simultaneously: SLB/HAL (oilfield services), PSX/VLO (refining), and XOM/CVX (integrated majors). All three pairs are driven by the same macro environment — oil prices, energy demand, and upstream capex cycles — but react differently in the short term, creating tradeable spreads.\nThe key design choice was a 60-day rolling OLS hedge ratio instead of a static formation-period estimate. This allows the strategy to adapt as the relative valuation between the two companies shifts over time.\n\n\nStatistical Validation\n\n\n\nPair\nEG p-value\nADF p-value\nResult\n\n\n\n\nSLB/HAL\n0.061\n0.040\nADF pass at 5%\n\n\nPSX/VLO\n0.140\n0.048\nADF pass at 5%\n\n\nXOM/CVX\n0.307\n0.132\nBoth marginal\n\n\n\n\n\nBacktest Results\nPortfolio total return: -1.44% over 294 trading days. PSX/VLO was the best performer (+0.99%, 2/3 wins). SLB/HAL was the main drag (-5.29%, 1/3 wins). XOM/CVX generated no signals — z-score never crossed ±2.0.\nAll 6 trades exited via mean reversion with zero stop-loss triggers, confirming the spread does eventually revert. The one-sided signal direction (all long spread) suggests a systematic downward drift in the spread during the backtest period.\n\n\nKey Risks\n\nSector concentration: All three pairs are in energy — correlated drawdowns\nWeak cointegration: XOM/CVX failed statistical tests\nSpread drift: All trades long spread suggests directional bias\nSmall sample: 6 trades over 294 days limits statistical inference\n\n\n\nHow to Improve\n\nAdd pairs from other sectors to reduce concentration risk\nRegime filter: avoid trading when VIX &gt; 25\nPartial exits at z = 0.5 to lock in profits earlier\nRe-run formation annually to keep parameters fresh"
   }
 ]
