@@ -1,7 +1,11 @@
 ---
 title: "Energy Sector Pairs Trading"
 subtitle: "Statistical arbitrage across the energy value chain — SLB/HAL · PSX/VLO · XOM/CVX"
-author: "Logan Ye & Xiaoyu Chen | Duke University — Fintech 533"
+author:
+  - name: "Xiaoyu Chen"
+    affiliation: "Duke University — Fintech 533"
+  - name: "Logan Ye"
+    affiliation: "Duke University — Fintech 533"
 date: today
 format:
   html:
@@ -76,20 +80,16 @@ portfolio breadth and strong economic rationale.
 
 ## Strategy Design
 
-### Rolling OLS — Dynamic Hedge Ratio
+### Rolling OLS - Dynamic Hedge Ratio
 
 Instead of fixing the hedge ratio at the formation-period OLS estimate, we
 use a **60-day rolling OLS window** that updates every trading day. This lets
 the strategy adapt as the relative valuation between the two companies shifts
 over time.
 
-The hedge ratio evolution is shown in the chart below — note how all three
-pairs drift significantly from their static OLS estimates (dashed lines),
-justifying the dynamic approach.
-
 ### Entry Rules
 
-- **Long spread** (long A, short B): z-score drops below **−2.0**
+- **Long spread** (long A, short B): z-score drops below **-2.0**
 - **Short spread** (short A, long B): z-score rises above **+2.0**
 
 We chose ±2.0 because it is wide enough to filter out daily noise but still
@@ -100,7 +100,7 @@ occurs frequently enough to generate meaningful trades over a year-long backtest
 | Fate | Trigger | Interpretation |
 |------|---------|---------------|
 | **Mean reversion** | z-score crosses 0 | Spread returned to equilibrium |
-| **Stop-loss** | \|z-score\| > 4.0 | Spread kept moving against us — cut loss |
+| **Stop-loss** | \|z-score\| > 4.0 | Spread kept moving against us - cut loss |
 | **End of backtest** | Position open at end | Force-closed at last price |
 
 ### Position Sizing
@@ -120,12 +120,24 @@ occurs frequently enough to generate meaningful trades over a year-long backtest
 | Ann. Return | -4.55% | +0.84% | 0.00% | -1.23% |
 | Sharpe Ratio | -0.501 | 0.198 | 0.000 | -0.351 |
 | Max Drawdown | -10.08% | -3.42% | 0.00% | -3.42% |
-| Win Rate | 33.3% | 66.7% | — | 50.0% |
-| Avg Hold (days) | 25.3 | 35.3 | — | 30.3 |
+| Win Rate | 33.3% | 66.7% | - | 50.0% |
+| Avg Hold (days) | 25.3 | 35.3 | - | 30.3 |
 | Total Trades | 3 | 3 | 0 | 6 |
 | Stop-loss Exits | 0 | 0 | 0 | 0 |
-| Exp. Return/Trade | -1.657% | +0.514% | — | -0.571% |
+| Exp. Return/Trade | -1.657% | +0.514% | - | -0.571% |
 
+### Alpha & Beta vs SPY
+
+| Metric | Value |
+|--------|-------|
+| Alpha (annualized) | -1.57% |
+| Beta | 0.019 |
+| R² | 0.011 |
+
+Beta of 0.019 confirms the strategy is effectively market neutral - only 1.1% of
+portfolio variance is explained by SPY movements. This is exactly what pairs trading
+should look like. The negative alpha reflects the overall portfolio loss during the
+backtest period, not market exposure.
 
 ### Extended Trade Statistics
 
@@ -136,108 +148,128 @@ occurs frequently enough to generate meaningful trades over a year-long backtest
 | Profit factor | 0.508 |
 | Max consecutive losses | 2 |
 
-**Exit type breakdown:**
-
 | Exit Type | Count | Rate |
 |-----------|-------|------|
 | Mean reversion | 6 | 100% |
 | Stop-loss | 0 | 0% |
 | End of backtest | 0 | 0% |
 
-**Per-pair breakdown:**
-
 | Pair | Trades | Wins | Losses | Avg Return |
 |------|--------|------|--------|-----------|
 | SLB/HAL | 3 | 1 | 2 | -1.657% |
 | PSX/VLO | 3 | 2 | 1 | +0.514% |
-| XOM/CVX | 0 | — | — | — |
+| XOM/CVX | 0 | - | - | - |
 
-### Equity Curves & Drawdown
+### Equity Curves, Drawdown & Z-scores
 
-![Equity curves, drawdown, z-scores, and trade returns](chart.png)
+```{=html}
+<iframe src="chart_interactive.html" width="100%" height="1080px"
+        frameborder="0" scrolling="no"></iframe>
+```
 
 ### Rolling Hedge Ratio Evolution
 
-![60-day rolling hedge ratio vs static OLS estimate](hedge_ratio.png)
+```{=html}
+<iframe src="hedge_ratio_interactive.html" width="100%" height="740px"
+        frameborder="0" scrolling="no"></iframe>
+```
 
 ---
 
 ## Trade Log
 
-| # | Pair | Open | Close | Direction | Entry Z | Exit Z | Days | Net Return | Fate |
-|---|------|------|-------|-----------|---------|--------|------|-----------|------|
-| 1 | PSX/VLO | 2025-04-03 | 2025-04-24 | Long spread | -2.856 | 0.064 | 21 | -0.85% | Mean reversion |
-| 2 | SLB/HAL | 2025-04-04 | 2025-04-22 | Long spread | -2.126 | 0.361 | 18 | -2.15% | Mean reversion |
-| 3 | PSX/VLO | 2025-05-21 | 2025-07-24 | Long spread | -2.131 | 0.089 | 64 | +0.60% | Mean reversion |
-| 4 | SLB/HAL | 2025-09-23 | 2025-10-23 | Long spread | -2.239 | 0.283 | 30 | -3.97% | Mean reversion |
-| 5 | SLB/HAL | 2026-03-11 | 2026-04-08 | Long spread | -2.181 | 0.636 | 28 | +1.15% | Mean reversion |
-| 6 | PSX/VLO | 2026-04-09 | 2026-04-30 | Long spread | -2.175 | 0.537 | 21 | +1.79% | Mean reversion |
+```{=html}
+<iframe src="blotter_table.html" width="100%" height="300px"
+        frameborder="0" scrolling="no"></iframe>
+```
 
 ---
 
-## Strategy Health Monitoring
+## Ledger
 
-### How do we know the strategy is performing as expected?
-
-We track the **rolling 60-day Sharpe ratio**. If it drops significantly below
-the backtest Sharpe, that signals underperformance. We also monitor the
-z-score distribution — if z-scores rarely cross 0 (the spread keeps widening
-instead of reverting), cointegration may have broken down.
-
-### How do we know when the strategy stops working?
-
-Two clear signals:
-
-1. **Stop-loss rate exceeds 50%** of all trades — the spread is trending against
-   us more often than not
-2. **Rolling hedge ratio drifts more than 30%** from its formation-period
-   estimate — the fundamental relationship between the two companies has changed
-
-At that point we re-run the screener on a fresh formation window and either
-update the parameters or switch pairs.
+```{=html}
+<iframe src="ledger_table.html" width="100%" height="640px"
+        frameborder="0" scrolling="no"></iframe>
+```
 
 ---
 
 ## Discussion
 
-### What the results tell us
+### What happened
 
-All 6 trades were **long spread** (z-score < -2.0), meaning the spread was
-consistently below its historical mean during the backtest period. This
-systematic one-sided signal suggests the spread had a directional drift rather
-than pure mean reversion — a sign of potential cointegration breakdown or a
-structural shift in relative valuation.
+Every trade was long spread - all 6 entries happened when z-score dropped below -2.0,
+none when it rose above +2.0. For a mean-reversion strategy, that's a red flag.
+It suggests the spread wasn't randomly oscillating around its historical mean;
+it was systematically below it for most of the backtest period.
 
-SLB/HAL was the main drag. The rolling hedge ratio chart shows the ratio
-drifted significantly from its formation estimate, particularly during
-mid-2025 and early 2026, which contributed to noisy z-score signals.
+SLB/HAL was the main drag, losing 2 of 3 trades for a total return of -5.29%.
+Trade 4 was the worst - entered at z = -2.24 in September 2025, but the spread
+kept falling before finally recovering 30 days later, costing -3.97%. The rolling
+hedge ratio for SLB/HAL drifted well above its formation estimate of 0.668 during
+mid-2025, which distorted the z-score and made entry signals unreliable.
 
-PSX/VLO performed best, consistent with its stronger ADF result in the
-formation period. XOM/CVX generated zero trades — its z-score never crossed
-±2.0, suggesting the spread remained within normal range throughout the
-backtest.
+PSX/VLO was the best of the three, finishing +0.99% with a 66.7% win rate.
+Its ADF result was the strongest at p = 0.048, and that held up - the spread
+behaved more cleanly during the backtest.
 
-Importantly, **all trades exited via mean reversion** with zero stop-loss
-triggers. This confirms the spread does eventually revert, but entry timing
-was unfavorable for several trades.
+XOM/CVX generated zero trades. The z-score never crossed ±2.0, which actually
+makes sense given its weak formation-period statistics (ADF p = 0.132).
+Including it added no value in this backtest.
+
+The one genuinely positive sign: all 6 trades exited via mean reversion,
+zero stop-losses. The spread always came back eventually - we just weren't
+always on the right side of the initial move.
 
 ### Risks
 
-- **Sector concentration:** All three pairs are in energy — a sector-wide
-  shock could blow out all three spreads simultaneously
-- **Weak cointegration:** XOM/CVX failed statistical tests — highest risk pair
-- **Systematic spread drift:** All trades were long spread, suggesting
-  directional bias rather than pure mean reversion
-- **Small sample:** 6 trades over 294 days is insufficient for strong
-  statistical conclusions
+All three pairs are in the same sector, so a broad energy selloff would hit
+all three spreads at once - there's no cross-sector cushion. XOM/CVX failed
+both statistical tests in the formation period and probably shouldn't have
+been included. The 6-trade sample is also too small to say much statistically;
+the results could easily look different over a longer backtest window.
 
-### How to improve
+### What we'd do differently
 
-- Add pairs from other sectors to reduce energy concentration risk
-- Use a regime filter (e.g. avoid trading when VIX > 25)
-- Implement partial exits at z = 0.5 to lock in profits earlier
-- Re-run formation period annually to keep parameters current
-- Increase rolling window from 60 to 90 days for more stable hedge ratios
+Adding pairs from outside energy would be the most impactful change -
+financial or consumer pairs would reduce the sector concentration risk.
+Beyond that, a regime filter like VIX > 25 would help avoid entering
+during high-volatility periods when spreads tend to trend rather than revert.
+On the exit side, partial takes at z = 0.5 would lock in gains faster
+instead of waiting for a full reversion to 0.
+
+---
+
+## Strategy Monitoring
+
+### How will we know the strategy is performing as expected?
+
+We track three metrics on a rolling 30-day basis after going live:
+
+1. **Rolling Sharpe ratio** - if it drops below -0.5 (our backtest benchmark),
+   the strategy is underperforming. We give it one full month before making
+   any changes to avoid reacting to noise.
+
+2. **Z-score crossing rate** - if the spread goes more than 60 consecutive days
+   without crossing 0, it's trending rather than mean-reverting.
+
+3. **Trade direction balance** - if more than 80% of trades over a 3-month window
+   are in the same direction, that signals systematic drift rather than
+   random mean reversion.
+
+### How will we quantify when the strategy stops working?
+
+Two hard stop conditions:
+
+1. **Stop-loss rate exceeds 50%** over any rolling 10-trade window - the spread
+   is consistently moving against us.
+
+2. **Rolling hedge ratio drifts more than 40% from the formation-period estimate** -
+   for example, if SLB/HAL's hedge ratio was 0.668 at formation and moves above
+   0.935 or below 0.401, we treat the relationship as structurally changed.
+
+If either condition is triggered, we stop trading, re-run the screener on a
+fresh 12-month formation window, and re-validate before resuming.
 
 ---
 
@@ -248,41 +280,3 @@ Full source code available in the
 The main notebook `backtest.ipynb` connects to IBKR via ShinyBroker
 to fetch historical data, runs the backtest, and generates `trades.csv`
 and `ledger.csv`.
-
----
-
-## Strategy Monitoring
-
-### How will we know the strategy is performing as expected?
-
-We track three metrics on a rolling 30-day basis after going live:
-
-1. **Rolling Sharpe ratio** — if it drops below −0.5 (our backtest benchmark),
-   the strategy is underperforming expectations. We give it one full month before
-   making any changes to avoid reacting to noise.
-
-2. **Z-score crossing rate** — we expect the z-score to cross 0 roughly as often
-   as it crossed 0 during the formation period. If the spread goes more than
-   60 consecutive days without crossing 0, the spread is trending rather than
-   mean-reverting — a sign cointegration has weakened.
-
-3. **Trade direction balance** — during the backtest, all 6 trades were long
-   spread. Going forward, if we see more than 80% of trades in the same
-   direction over a 3-month window, it signals a systematic drift in the spread
-   rather than random mean reversion.
-
-### How will we quantify when the strategy stops working?
-
-We define two hard stop conditions:
-
-1. **Stop-loss rate exceeds 50%** over any rolling 10-trade window — the spread
-   is consistently moving against us, meaning the mean-reversion assumption has
-   broken down.
-
-2. **Rolling hedge ratio drifts more than 40% from the formation-period
-   estimate** — for example, if the SLB/HAL hedge ratio was 0.668 at formation
-   and the 60-day rolling estimate moves above 0.935 or below 0.401, we treat
-   the structural relationship as changed.
-
-If either condition is triggered, we stop trading, re-run the screener on a
-fresh 12-month formation window, and re-validate the pairs before resuming.

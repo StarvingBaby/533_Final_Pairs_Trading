@@ -251,7 +251,7 @@ html {
 }
 
 /* Mobile */
-@media (max-width: 640px) {
+@media (max-width: 950px) {
   .quarto-title {
     font-size: 2rem;
   }

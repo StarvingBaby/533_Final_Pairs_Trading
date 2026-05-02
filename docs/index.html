@@ -2,11 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.36">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Logan Ye &amp; Xiaoyu Chen | Duke University — Fintech 533">
+<meta name="author" content="Xiaoyu Chen">
+<meta name="author" content="Logan Ye">
 <meta name="dcterms.date" content="2026-05-02">
 
 <title>Energy Sector Pairs Trading – Energy Pairs Trading</title>
@@ -41,7 +42,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -124,10 +125,10 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#strategy-design" id="toc-strategy-design" class="nav-link" data-scroll-target="#strategy-design">Strategy Design</a></li>
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
   <li><a href="#trade-log" id="toc-trade-log" class="nav-link" data-scroll-target="#trade-log">Trade Log</a></li>
-  <li><a href="#strategy-health-monitoring" id="toc-strategy-health-monitoring" class="nav-link" data-scroll-target="#strategy-health-monitoring">Strategy Health Monitoring</a></li>
+  <li><a href="#ledger" id="toc-ledger" class="nav-link" data-scroll-target="#ledger">Ledger</a></li>
   <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
-  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">Code</a></li>
   <li><a href="#strategy-monitoring" id="toc-strategy-monitoring" class="nav-link" data-scroll-target="#strategy-monitoring">Strategy Monitoring</a></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">Code</a></li>
   </ul>
 </nav>
     </div>
@@ -141,16 +142,31 @@ ul.task-list li input[type="checkbox"] {
 </div>
 
 
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Xiaoyu Chen </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Duke University — Fintech 533
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Logan Ye </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Duke University — Fintech 533
+          </p>
+      </div>
+  </div>
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Logan Ye &amp; Xiaoyu Chen | Duke University — Fintech 533 </p>
-          </div>
-  </div>
-    
+      
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
@@ -268,15 +284,14 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="strategy-design" class="level2">
 <h2 class="anchored" data-anchor-id="strategy-design">Strategy Design</h2>
-<section id="rolling-ols-dynamic-hedge-ratio" class="level3">
-<h3 class="anchored" data-anchor-id="rolling-ols-dynamic-hedge-ratio">Rolling OLS — Dynamic Hedge Ratio</h3>
+<section id="rolling-ols---dynamic-hedge-ratio" class="level3">
+<h3 class="anchored" data-anchor-id="rolling-ols---dynamic-hedge-ratio">Rolling OLS - Dynamic Hedge Ratio</h3>
 <p>Instead of fixing the hedge ratio at the formation-period OLS estimate, we use a <strong>60-day rolling OLS window</strong> that updates every trading day. This lets the strategy adapt as the relative valuation between the two companies shifts over time.</p>
-<p>The hedge ratio evolution is shown in the chart below — note how all three pairs drift significantly from their static OLS estimates (dashed lines), justifying the dynamic approach.</p>
 </section>
 <section id="entry-rules" class="level3">
 <h3 class="anchored" data-anchor-id="entry-rules">Entry Rules</h3>
 <ul>
-<li><strong>Long spread</strong> (long A, short B): z-score drops below <strong>−2.0</strong></li>
+<li><strong>Long spread</strong> (long A, short B): z-score drops below <strong>-2.0</strong></li>
 <li><strong>Short spread</strong> (short A, long B): z-score rises above <strong>+2.0</strong></li>
 </ul>
 <p>We chose ±2.0 because it is wide enough to filter out daily noise but still occurs frequently enough to generate meaningful trades over a year-long backtest.</p>
@@ -305,7 +320,7 @@ ul.task-list li input[type="checkbox"] {
 <tr class="even">
 <td><strong>Stop-loss</strong></td>
 <td>|z-score| &gt; 4.0</td>
-<td>Spread kept moving against us — cut loss</td>
+<td>Spread kept moving against us - cut loss</td>
 </tr>
 <tr class="odd">
 <td><strong>End of backtest</strong></td>
@@ -371,14 +386,14 @@ ul.task-list li input[type="checkbox"] {
 <td>Win Rate</td>
 <td>33.3%</td>
 <td>66.7%</td>
-<td>—</td>
+<td>-</td>
 <td>50.0%</td>
 </tr>
 <tr class="even">
 <td>Avg Hold (days)</td>
 <td>25.3</td>
 <td>35.3</td>
-<td>—</td>
+<td>-</td>
 <td>30.3</td>
 </tr>
 <tr class="odd">
@@ -399,11 +414,37 @@ ul.task-list li input[type="checkbox"] {
 <td>Exp. Return/Trade</td>
 <td>-1.657%</td>
 <td>+0.514%</td>
-<td>—</td>
+<td>-</td>
 <td>-0.571%</td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="alpha-beta-vs-spy" class="level3">
+<h3 class="anchored" data-anchor-id="alpha-beta-vs-spy">Alpha &amp; Beta vs SPY</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Alpha (annualized)</td>
+<td>-1.57%</td>
+</tr>
+<tr class="even">
+<td>Beta</td>
+<td>0.019</td>
+</tr>
+<tr class="odd">
+<td>R²</td>
+<td>0.011</td>
+</tr>
+</tbody>
+</table>
+<p>Beta of 0.019 confirms the strategy is effectively market neutral - only 1.1% of portfolio variance is explained by SPY movements. This is exactly what pairs trading should look like. The negative alpha reflects the overall portfolio loss during the backtest period, not market exposure.</p>
 </section>
 <section id="extended-trade-statistics" class="level3">
 <h3 class="anchored" data-anchor-id="extended-trade-statistics">Extended Trade Statistics</h3>
@@ -433,7 +474,6 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<p><strong>Exit type breakdown:</strong></p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -460,7 +500,6 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<p><strong>Per-pair breakdown:</strong></p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -489,190 +528,52 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td>XOM/CVX</td>
 <td>0</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="equity-curves-drawdown" class="level3">
-<h3 class="anchored" data-anchor-id="equity-curves-drawdown">Equity Curves &amp; Drawdown</h3>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="chart.png" class="img-fluid figure-img"></p>
-<figcaption>Equity curves, drawdown, z-scores, and trade returns</figcaption>
-</figure>
-</div>
+<section id="equity-curves-drawdown-z-scores" class="level3">
+<h3 class="anchored" data-anchor-id="equity-curves-drawdown-z-scores">Equity Curves, Drawdown &amp; Z-scores</h3>
+<iframe src="chart_interactive.html" width="100%" height="1080px" frameborder="0" scrolling="no"></iframe>
 </section>
 <section id="rolling-hedge-ratio-evolution" class="level3">
 <h3 class="anchored" data-anchor-id="rolling-hedge-ratio-evolution">Rolling Hedge Ratio Evolution</h3>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="hedge_ratio.png" class="img-fluid figure-img"></p>
-<figcaption>60-day rolling hedge ratio vs static OLS estimate</figcaption>
-</figure>
-</div>
+<iframe src="hedge_ratio_interactive.html" width="100%" height="740px" frameborder="0" scrolling="no"></iframe>
 <hr>
 </section>
 </section>
 <section id="trade-log" class="level2">
 <h2 class="anchored" data-anchor-id="trade-log">Trade Log</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 4%">
-<col style="width: 8%">
-<col style="width: 8%">
-<col style="width: 9%">
-<col style="width: 15%">
-<col style="width: 12%">
-<col style="width: 10%">
-<col style="width: 8%">
-<col style="width: 15%">
-<col style="width: 8%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>#</th>
-<th>Pair</th>
-<th>Open</th>
-<th>Close</th>
-<th>Direction</th>
-<th>Entry Z</th>
-<th>Exit Z</th>
-<th>Days</th>
-<th>Net Return</th>
-<th>Fate</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td>PSX/VLO</td>
-<td>2025-04-03</td>
-<td>2025-04-24</td>
-<td>Long spread</td>
-<td>-2.856</td>
-<td>0.064</td>
-<td>21</td>
-<td>-0.85%</td>
-<td>Mean reversion</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>SLB/HAL</td>
-<td>2025-04-04</td>
-<td>2025-04-22</td>
-<td>Long spread</td>
-<td>-2.126</td>
-<td>0.361</td>
-<td>18</td>
-<td>-2.15%</td>
-<td>Mean reversion</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>PSX/VLO</td>
-<td>2025-05-21</td>
-<td>2025-07-24</td>
-<td>Long spread</td>
-<td>-2.131</td>
-<td>0.089</td>
-<td>64</td>
-<td>+0.60%</td>
-<td>Mean reversion</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td>SLB/HAL</td>
-<td>2025-09-23</td>
-<td>2025-10-23</td>
-<td>Long spread</td>
-<td>-2.239</td>
-<td>0.283</td>
-<td>30</td>
-<td>-3.97%</td>
-<td>Mean reversion</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td>SLB/HAL</td>
-<td>2026-03-11</td>
-<td>2026-04-08</td>
-<td>Long spread</td>
-<td>-2.181</td>
-<td>0.636</td>
-<td>28</td>
-<td>+1.15%</td>
-<td>Mean reversion</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td>PSX/VLO</td>
-<td>2026-04-09</td>
-<td>2026-04-30</td>
-<td>Long spread</td>
-<td>-2.175</td>
-<td>0.537</td>
-<td>21</td>
-<td>+1.79%</td>
-<td>Mean reversion</td>
-</tr>
-</tbody>
-</table>
+<iframe src="blotter_table.html" width="100%" height="300px" frameborder="0" scrolling="no"></iframe>
 <hr>
 </section>
-<section id="strategy-health-monitoring" class="level2">
-<h2 class="anchored" data-anchor-id="strategy-health-monitoring">Strategy Health Monitoring</h2>
-<section id="how-do-we-know-the-strategy-is-performing-as-expected" class="level3">
-<h3 class="anchored" data-anchor-id="how-do-we-know-the-strategy-is-performing-as-expected">How do we know the strategy is performing as expected?</h3>
-<p>We track the <strong>rolling 60-day Sharpe ratio</strong>. If it drops significantly below the backtest Sharpe, that signals underperformance. We also monitor the z-score distribution — if z-scores rarely cross 0 (the spread keeps widening instead of reverting), cointegration may have broken down.</p>
-</section>
-<section id="how-do-we-know-when-the-strategy-stops-working" class="level3">
-<h3 class="anchored" data-anchor-id="how-do-we-know-when-the-strategy-stops-working">How do we know when the strategy stops working?</h3>
-<p>Two clear signals:</p>
-<ol type="1">
-<li><strong>Stop-loss rate exceeds 50%</strong> of all trades — the spread is trending against us more often than not</li>
-<li><strong>Rolling hedge ratio drifts more than 30%</strong> from its formation-period estimate — the fundamental relationship between the two companies has changed</li>
-</ol>
-<p>At that point we re-run the screener on a fresh formation window and either update the parameters or switch pairs.</p>
+<section id="ledger" class="level2">
+<h2 class="anchored" data-anchor-id="ledger">Ledger</h2>
+<iframe src="ledger_table.html" width="100%" height="640px" frameborder="0" scrolling="no"></iframe>
 <hr>
-</section>
 </section>
 <section id="discussion" class="level2">
 <h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
-<section id="what-the-results-tell-us" class="level3">
-<h3 class="anchored" data-anchor-id="what-the-results-tell-us">What the results tell us</h3>
-<p>All 6 trades were <strong>long spread</strong> (z-score &lt; -2.0), meaning the spread was consistently below its historical mean during the backtest period. This systematic one-sided signal suggests the spread had a directional drift rather than pure mean reversion — a sign of potential cointegration breakdown or a structural shift in relative valuation.</p>
-<p>SLB/HAL was the main drag. The rolling hedge ratio chart shows the ratio drifted significantly from its formation estimate, particularly during mid-2025 and early 2026, which contributed to noisy z-score signals.</p>
-<p>PSX/VLO performed best, consistent with its stronger ADF result in the formation period. XOM/CVX generated zero trades — its z-score never crossed ±2.0, suggesting the spread remained within normal range throughout the backtest.</p>
-<p>Importantly, <strong>all trades exited via mean reversion</strong> with zero stop-loss triggers. This confirms the spread does eventually revert, but entry timing was unfavorable for several trades.</p>
+<section id="what-happened" class="level3">
+<h3 class="anchored" data-anchor-id="what-happened">What happened</h3>
+<p>Every trade was long spread - all 6 entries happened when z-score dropped below -2.0, none when it rose above +2.0. For a mean-reversion strategy, that’s a red flag. It suggests the spread wasn’t randomly oscillating around its historical mean; it was systematically below it for most of the backtest period.</p>
+<p>SLB/HAL was the main drag, losing 2 of 3 trades for a total return of -5.29%. Trade 4 was the worst - entered at z = -2.24 in September 2025, but the spread kept falling before finally recovering 30 days later, costing -3.97%. The rolling hedge ratio for SLB/HAL drifted well above its formation estimate of 0.668 during mid-2025, which distorted the z-score and made entry signals unreliable.</p>
+<p>PSX/VLO was the best of the three, finishing +0.99% with a 66.7% win rate. Its ADF result was the strongest at p = 0.048, and that held up - the spread behaved more cleanly during the backtest.</p>
+<p>XOM/CVX generated zero trades. The z-score never crossed ±2.0, which actually makes sense given its weak formation-period statistics (ADF p = 0.132). Including it added no value in this backtest.</p>
+<p>The one genuinely positive sign: all 6 trades exited via mean reversion, zero stop-losses. The spread always came back eventually - we just weren’t always on the right side of the initial move.</p>
 </section>
 <section id="risks" class="level3">
 <h3 class="anchored" data-anchor-id="risks">Risks</h3>
-<ul>
-<li><strong>Sector concentration:</strong> All three pairs are in energy — a sector-wide shock could blow out all three spreads simultaneously</li>
-<li><strong>Weak cointegration:</strong> XOM/CVX failed statistical tests — highest risk pair</li>
-<li><strong>Systematic spread drift:</strong> All trades were long spread, suggesting directional bias rather than pure mean reversion</li>
-<li><strong>Small sample:</strong> 6 trades over 294 days is insufficient for strong statistical conclusions</li>
-</ul>
+<p>All three pairs are in the same sector, so a broad energy selloff would hit all three spreads at once - there’s no cross-sector cushion. XOM/CVX failed both statistical tests in the formation period and probably shouldn’t have been included. The 6-trade sample is also too small to say much statistically; the results could easily look different over a longer backtest window.</p>
 </section>
-<section id="how-to-improve" class="level3">
-<h3 class="anchored" data-anchor-id="how-to-improve">How to improve</h3>
-<ul>
-<li>Add pairs from other sectors to reduce energy concentration risk</li>
-<li>Use a regime filter (e.g.&nbsp;avoid trading when VIX &gt; 25)</li>
-<li>Implement partial exits at z = 0.5 to lock in profits earlier</li>
-<li>Re-run formation period annually to keep parameters current</li>
-<li>Increase rolling window from 60 to 90 days for more stable hedge ratios</li>
-</ul>
+<section id="what-wed-do-differently" class="level3">
+<h3 class="anchored" data-anchor-id="what-wed-do-differently">What we’d do differently</h3>
+<p>Adding pairs from outside energy would be the most impactful change - financial or consumer pairs would reduce the sector concentration risk. Beyond that, a regime filter like VIX &gt; 25 would help avoid entering during high-volatility periods when spreads tend to trend rather than revert. On the exit side, partial takes at z = 0.5 would lock in gains faster instead of waiting for a full reversion to 0.</p>
 <hr>
 </section>
-</section>
-<section id="code" class="level2">
-<h2 class="anchored" data-anchor-id="code">Code</h2>
-<p>Full source code available in the <a href="https://github.com/StarvingBaby/533_Final_Pairs_Trading">GitHub repository</a>. The main notebook <code>backtest.ipynb</code> connects to IBKR via ShinyBroker to fetch historical data, runs the backtest, and generates <code>trades.csv</code> and <code>ledger.csv</code>.</p>
-<hr>
 </section>
 <section id="strategy-monitoring" class="level2">
 <h2 class="anchored" data-anchor-id="strategy-monitoring">Strategy Monitoring</h2>
@@ -680,22 +581,27 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="how-will-we-know-the-strategy-is-performing-as-expected">How will we know the strategy is performing as expected?</h3>
 <p>We track three metrics on a rolling 30-day basis after going live:</p>
 <ol type="1">
-<li><p><strong>Rolling Sharpe ratio</strong> — if it drops below −0.5 (our backtest benchmark), the strategy is underperforming expectations. We give it one full month before making any changes to avoid reacting to noise.</p></li>
-<li><p><strong>Z-score crossing rate</strong> — we expect the z-score to cross 0 roughly as often as it crossed 0 during the formation period. If the spread goes more than 60 consecutive days without crossing 0, the spread is trending rather than mean-reverting — a sign cointegration has weakened.</p></li>
-<li><p><strong>Trade direction balance</strong> — during the backtest, all 6 trades were long spread. Going forward, if we see more than 80% of trades in the same direction over a 3-month window, it signals a systematic drift in the spread rather than random mean reversion.</p></li>
+<li><p><strong>Rolling Sharpe ratio</strong> - if it drops below -0.5 (our backtest benchmark), the strategy is underperforming. We give it one full month before making any changes to avoid reacting to noise.</p></li>
+<li><p><strong>Z-score crossing rate</strong> - if the spread goes more than 60 consecutive days without crossing 0, it’s trending rather than mean-reverting.</p></li>
+<li><p><strong>Trade direction balance</strong> - if more than 80% of trades over a 3-month window are in the same direction, that signals systematic drift rather than random mean reversion.</p></li>
 </ol>
 </section>
 <section id="how-will-we-quantify-when-the-strategy-stops-working" class="level3">
 <h3 class="anchored" data-anchor-id="how-will-we-quantify-when-the-strategy-stops-working">How will we quantify when the strategy stops working?</h3>
-<p>We define two hard stop conditions:</p>
+<p>Two hard stop conditions:</p>
 <ol type="1">
-<li><p><strong>Stop-loss rate exceeds 50%</strong> over any rolling 10-trade window — the spread is consistently moving against us, meaning the mean-reversion assumption has broken down.</p></li>
-<li><p><strong>Rolling hedge ratio drifts more than 40% from the formation-period estimate</strong> — for example, if the SLB/HAL hedge ratio was 0.668 at formation and the 60-day rolling estimate moves above 0.935 or below 0.401, we treat the structural relationship as changed.</p></li>
+<li><p><strong>Stop-loss rate exceeds 50%</strong> over any rolling 10-trade window - the spread is consistently moving against us.</p></li>
+<li><p><strong>Rolling hedge ratio drifts more than 40% from the formation-period estimate</strong> - for example, if SLB/HAL’s hedge ratio was 0.668 at formation and moves above 0.935 or below 0.401, we treat the relationship as structurally changed.</p></li>
 </ol>
-<p>If either condition is triggered, we stop trading, re-run the screener on a fresh 12-month formation window, and re-validate the pairs before resuming.</p>
-
-
+<p>If either condition is triggered, we stop trading, re-run the screener on a fresh 12-month formation window, and re-validate before resuming.</p>
+<hr>
 </section>
+</section>
+<section id="code" class="level2">
+<h2 class="anchored" data-anchor-id="code">Code</h2>
+<p>Full source code available in the <a href="https://github.com/StarvingBaby/533_Final_Pairs_Trading">GitHub repository</a>. The main notebook <code>backtest.ipynb</code> connects to IBKR via ShinyBroker to fetch historical data, runs the backtest, and generates <code>trades.csv</code> and <code>ledger.csv</code>.</p>
+
+
 </section>
 
 </main> <!-- /main -->
