@@ -1,0 +1,261 @@
+/* Apple-style design system */
+@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --apple-blue: #0071e3;
+  --apple-blue-hover: #0077ed;
+  --apple-dark: #1d1d1f;
+  --apple-gray: #6e6e73;
+  --apple-light-gray: #f5f5f7;
+  --apple-white: #ffffff;
+  --apple-border: #d2d2d7;
+  --apple-green: #30d158;
+  --apple-red: #ff3b30;
+}
+
+/* Base */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+               'SF Pro Text', 'Helvetica Neue', sans-serif;
+  background: var(--apple-white);
+  color: var(--apple-dark);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+/* Hero section */
+.quarto-title-block {
+  background: linear-gradient(180deg, #fbfbfd 0%, #ffffff 100%);
+  padding: 80px 0 60px;
+  text-align: center;
+  border-bottom: 1px solid var(--apple-border);
+  margin-bottom: 0;
+}
+
+.quarto-title {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--apple-dark);
+  line-height: 1.1;
+}
+
+.quarto-title-subtitle {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--apple-gray);
+  margin-top: 8px;
+}
+
+.quarto-title-meta {
+  color: var(--apple-gray);
+  font-size: 0.85rem;
+  margin-top: 16px;
+}
+
+/* Main content */
+#quarto-content {
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+/* Headings */
+h1, h2, h3 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--apple-dark);
+}
+
+h2 {
+  font-size: 1.6rem;
+  margin-top: 64px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--apple-border);
+}
+
+h3 {
+  font-size: 1.1rem;
+  margin-top: 32px;
+  color: var(--apple-dark);
+}
+
+p {
+  color: #3a3a3c;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+/* Tables — Apple card style */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--apple-border);
+  margin: 24px 0;
+  font-size: 0.9rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+thead th {
+  background: var(--apple-light-gray);
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--apple-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--apple-border);
+}
+
+tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f2;
+  color: var(--apple-dark);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover td {
+  background: #fafafa;
+}
+
+/* Images */
+img {
+  border-radius: 16px;
+  border: 1px solid var(--apple-border);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  margin: 24px 0;
+  width: 100%;
+}
+
+/* Blockquote / callout style */
+blockquote {
+  background: var(--apple-light-gray);
+  border-left: 3px solid var(--apple-blue);
+  border-radius: 0 12px 12px 0;
+  padding: 16px 20px;
+  margin: 24px 0;
+  color: var(--apple-dark);
+  font-style: normal;
+}
+
+/* Code blocks */
+pre {
+  background: #1c1c1e !important;
+  border-radius: 12px;
+  padding: 20px;
+  font-size: 0.85rem;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+}
+
+code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.85em;
+  background: var(--apple-light-gray);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--apple-dark);
+}
+
+pre code {
+  background: transparent;
+  color: #f8f8f2;
+  padding: 0;
+}
+
+/* TOC */
+#TOC {
+  background: var(--apple-light-gray);
+  border-radius: 16px;
+  padding: 20px 24px;
+  border: none;
+  font-size: 0.875rem;
+}
+
+#TOC a {
+  color: var(--apple-blue);
+  text-decoration: none;
+}
+
+#TOC a:hover {
+  text-decoration: underline;
+}
+
+/* Stat cards — for key metrics in the overview section */
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.metric-card {
+  background: var(--apple-light-gray);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+}
+
+.metric-card .val {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--apple-dark);
+  letter-spacing: -0.02em;
+}
+
+.metric-card .lbl {
+  font-size: 0.8rem;
+  color: var(--apple-gray);
+  margin-top: 4px;
+}
+
+.positive { color: var(--apple-green) !important; }
+.negative { color: var(--apple-red)   !important; }
+
+/* Links */
+a {
+  color: var(--apple-blue);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Horizontal rule */
+hr {
+  border: none;
+  border-top: 1px solid var(--apple-border);
+  margin: 48px 0;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Footer */
+.quarto-footer {
+  border-top: 1px solid var(--apple-border);
+  padding: 24px;
+  text-align: center;
+  color: var(--apple-gray);
+  font-size: 0.85rem;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .quarto-title {
+    font-size: 2rem;
+  }
+  #quarto-content {
+    padding: 32px 16px;
+  }
+}
