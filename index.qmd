@@ -126,6 +126,32 @@ occurs frequently enough to generate meaningful trades over a year-long backtest
 | Stop-loss Exits | 0 | 0 | 0 | 0 |
 | Exp. Return/Trade | -1.657% | +0.514% | — | -0.571% |
 
+
+### Extended Trade Statistics
+
+| Metric | Value |
+|--------|-------|
+| Avg win per trade | +1.182% |
+| Avg loss per trade | -2.325% |
+| Profit factor | 0.508 |
+| Max consecutive losses | 2 |
+
+**Exit type breakdown:**
+
+| Exit Type | Count | Rate |
+|-----------|-------|------|
+| Mean reversion | 6 | 100% |
+| Stop-loss | 0 | 0% |
+| End of backtest | 0 | 0% |
+
+**Per-pair breakdown:**
+
+| Pair | Trades | Wins | Losses | Avg Return |
+|------|--------|------|--------|-----------|
+| SLB/HAL | 3 | 1 | 2 | -1.657% |
+| PSX/VLO | 3 | 2 | 1 | +0.514% |
+| XOM/CVX | 0 | — | — | — |
+
 ### Equity Curves & Drawdown
 
 ![Equity curves, drawdown, z-scores, and trade returns](chart.png)
