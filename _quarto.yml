@@ -1,0 +1,17 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Energy Pairs Trading"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: backtest.ipynb
+        text: Notebook
+
+format:
+  html:
+    theme: cosmo
+    toc: true

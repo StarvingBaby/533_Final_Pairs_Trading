@@ -1,0 +1,107 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Energy Sector Pairs Trading",
+    "section": "",
+    "text": "We run a pairs trading strategy across three energy sector pairs simultaneously, capturing relative value dislocations within the energy industry.\nThe three pairs span different parts of the energy value chain — all driven by the same macro environment (oil prices, energy demand, capex cycles) but reacting differently in the short term, creating tradeable spreads.\n\n\n\n\n\n\n\n\nPair\nSub-sector\nEconomic link\n\n\n\n\nSLB / HAL\nOilfield Services\nBoth serve upstream drillers; revenue tracks rig counts\n\n\nPSX / VLO\nRefining\nBoth earn on crack spread; same input/output\n\n\nXOM / CVX\nIntegrated Majors\nLargest US oil majors; same macro exposure\n\n\n\nFormation period: 2024-03-01 → 2025-03-01\nBacktest period: 2025-03-01 → 2026-03-26\nCapital: $100,000 split equally across 3 pairs ($33,333 each)"
+  },
+  {
+    "objectID": "index.html#overview",
+    "href": "index.html#overview",
+    "title": "Energy Sector Pairs Trading",
+    "section": "",
+    "text": "We run a pairs trading strategy across three energy sector pairs simultaneously, capturing relative value dislocations within the energy industry.\nThe three pairs span different parts of the energy value chain — all driven by the same macro environment (oil prices, energy demand, capex cycles) but reacting differently in the short term, creating tradeable spreads.\n\n\n\n\n\n\n\n\nPair\nSub-sector\nEconomic link\n\n\n\n\nSLB / HAL\nOilfield Services\nBoth serve upstream drillers; revenue tracks rig counts\n\n\nPSX / VLO\nRefining\nBoth earn on crack spread; same input/output\n\n\nXOM / CVX\nIntegrated Majors\nLargest US oil majors; same macro exposure\n\n\n\nFormation period: 2024-03-01 → 2025-03-01\nBacktest period: 2025-03-01 → 2026-03-26\nCapital: $100,000 split equally across 3 pairs ($33,333 each)"
+  },
+  {
+    "objectID": "index.html#pair-selection-rationale",
+    "href": "index.html#pair-selection-rationale",
+    "title": "Energy Sector Pairs Trading",
+    "section": "Pair Selection & Rationale",
+    "text": "Pair Selection & Rationale\nAll three pairs share a core thesis: companies in the same sub-sector of energy are exposed to the same macro drivers, so short-term price dislocations between them tend to revert.\nSLB / HAL — Schlumberger and Halliburton are the two largest oilfield services companies globally. Both provide drilling, completion, and reservoir services to the same customers. When one temporarily outperforms the other, competitive dynamics pull the spread back.\nPSX / VLO — Phillips 66 and Valero are pure-play refiners. Their margins are entirely driven by the crack spread — the difference between crude oil input cost and refined product prices. Same input, same output, same margin driver.\nXOM / CVX — ExxonMobil and Chevron are the two largest US integrated oil majors. Both produce, refine, and sell oil and gas globally. Their relative valuation is driven by capital allocation and dividend policy, making the spread mean-reverting over medium horizons."
+  },
+  {
+    "objectID": "index.html#statistical-validation-formation-period",
+    "href": "index.html#statistical-validation-formation-period",
+    "title": "Energy Sector Pairs Trading",
+    "section": "Statistical Validation (Formation Period)",
+    "text": "Statistical Validation (Formation Period)\nCointegration was tested on the formation period only — the data available before going live on March 1 2025.\n\n\n\nPair\nCorrelation\nEG p-value\nADF p-value\nHedge Ratio β\nR²\n\n\n\n\nSLB/HAL\n0.923\n0.061\n0.040 ✓\n0.880\n0.851\n\n\nPSX/VLO\n0.942\n0.132\n0.044 ✓\n0.849\n0.771\n\n\nXOM/CVX\n0.946\n0.278\n0.115\n0.918\n0.894\n\n\n\nThe ADF test on OLS residuals confirms that the spread is stationary (mean-reverting) for SLB/HAL and PSX/VLO at the 5% level. XOM/CVX has a weaker statistical case but is included for portfolio breadth and its extremely strong economic rationale.\nKey upgrade from HW2: Instead of fixing the hedge ratio at the OLS estimate, we use a Kalman filter to update it every trading day. This lets the strategy adapt as the relative valuation between the two companies shifts over time."
+  },
+  {
+    "objectID": "index.html#entry-exit-rules",
+    "href": "index.html#entry-exit-rules",
+    "title": "Energy Sector Pairs Trading",
+    "section": "Entry & Exit Rules",
+    "text": "Entry & Exit Rules\n\nEntry\n\nLong spread (long A, short B): z-score drops below −2.0\nShort spread (short A, long B): z-score rises above +2.0\n\nWe chose ±2.0 because it is wide enough to filter out daily noise but still occurs frequently enough over a year-long backtest to generate meaningful trades.\n\n\nExit\n\n\n\n\n\n\n\n\nFate\nCondition\nMeaning\n\n\n\n\nMean reversion\nz-score crosses 0\nSpread returned to equilibrium — we profit\n\n\nStop-loss\n|z-score| exceeds 4.0\nSpread kept moving against us — cut the loss\n\n\nEnd of backtest\nPosition still open at end\nForce-closed at last available price\n\n\n\n\n\nPosition Sizing\n\n$33,333 allocated per pair (dollar-neutral: ~$16,667 per leg)\n5 bps transaction cost one-way (10 bps round-trip per trade)"
+  },
+  {
+    "objectID": "index.html#backtest-results",
+    "href": "index.html#backtest-results",
+    "title": "Energy Sector Pairs Trading",
+    "section": "Backtest Results",
+    "text": "Backtest Results\n\n\nRun backtest.ipynb first to generate trades.csv and ledger.csv"
+  },
+  {
+    "objectID": "index.html#charts",
+    "href": "index.html#charts",
+    "title": "Energy Sector Pairs Trading",
+    "section": "Charts",
+    "text": "Charts\n\n\nRun backtest.ipynb first to generate CSV files"
+  },
+  {
+    "objectID": "index.html#trade-log",
+    "href": "index.html#trade-log",
+    "title": "Energy Sector Pairs Trading",
+    "section": "Trade Log",
+    "text": "Trade Log\nFill in after running pairs_trading.ipynb\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPair\nOpen\nClose\nDirection\nEntry Z\nExit Z\nDays\nNet Return\nFate\n\n\n\n\n—\n—\n—\n—\n—\n—\n—\n—\n—"
+  },
+  {
+    "objectID": "index.html#strategy-health-monitoring",
+    "href": "index.html#strategy-health-monitoring",
+    "title": "Energy Sector Pairs Trading",
+    "section": "Strategy Health Monitoring",
+    "text": "Strategy Health Monitoring\n\nHow do we know the strategy is performing as expected?\nWe track the rolling 60-day Sharpe ratio. If it drops significantly below the backtest Sharpe, that signals underperformance. We also monitor the z-score distribution — if z-scores rarely cross 0, cointegration may have broken down.\n\n\nHow do we know when the strategy stops working?\nTwo clear signals:\n\nStop-loss rate exceeds 50% of all trades — the spread is trending against us more often than not\nKalman hedge ratio drifts more than 30% from its formation-period estimate — the fundamental relationship has changed\n\nAt that point we re-run the screener on a fresh formation window and either update the parameters or switch pairs."
+  },
+  {
+    "objectID": "index.html#risks",
+    "href": "index.html#risks",
+    "title": "Energy Sector Pairs Trading",
+    "section": "Risks",
+    "text": "Risks\n\nSector concentration: All three pairs are in energy — a sector-wide shock could blow out all three spreads simultaneously\nWeak cointegration: XOM/CVX did not pass strict 5% tests — highest-risk pair\nKalman overfitting: If delta is too high, the filter chases noise\nSmall sample: ~12 months of backtest limits statistical significance"
+  },
+  {
+    "objectID": "index.html#resources",
+    "href": "index.html#resources",
+    "title": "Energy Sector Pairs Trading",
+    "section": "Resources",
+    "text": "Resources\n\nGatev, Goetzmann, Rouwenhorst (2006) — Pairs Trading\nKalman Filter for pairs trading — explanation\nGitHub Repository"
+  },
+  {
+    "objectID": "index.html#statistical-validation",
+    "href": "index.html#statistical-validation",
+    "title": "Energy Sector Pairs Trading",
+    "section": "Statistical Validation",
+    "text": "Statistical Validation\nCointegration was tested on the formation period only (2024-03-01 to 2025-03-01) — the data available before going live on March 1 2025. No backtest data was used in parameter estimation.\n\n\n\nPair\nCorrelation\nEG p-value\nADF p-value\nHedge Ratio β\nR²\n\n\n\n\nSLB/HAL\n—\n—\n—\n—\n—\n\n\nPSX/VLO\n—\n—\n—\n—\n—\n\n\nXOM/CVX\n—\n—\n—\n—\n—\n\n\n\nFill in after running pairs_trading.ipynb"
+  },
+  {
+    "objectID": "index.html#strategy-design",
+    "href": "index.html#strategy-design",
+    "title": "Energy Sector Pairs Trading",
+    "section": "Strategy Design",
+    "text": "Strategy Design\n\nKalman Filter — Dynamic Hedge Ratio\nUnlike a simple OLS approach, we use a Kalman filter to update the hedge ratio every trading day. This lets the strategy adapt as the relative valuation between the two companies shifts over time.\nThe filter treats the hedge ratio as a hidden state that evolves slowly, controlled by a process noise parameter delta = 1e-4. The filter is warmed up on the formation period before the backtest begins.\n\n\nEntry Rules\n\nLong spread (long A, short B): z-score drops below −2.0\nShort spread (short A, long B): z-score rises above +2.0\n\nWe chose ±2.0 because it is wide enough to filter out daily noise but still occurs frequently enough to generate meaningful trades over a year-long backtest.\n\n\nExit Rules\n\n\n\n\n\n\n\n\nFate\nTrigger\nInterpretation\n\n\n\n\nMean reversion\nz-score crosses 0\nSpread returned to equilibrium\n\n\nStop-loss\n|z-score| &gt; 4.0\nSpread kept moving against us — cut loss\n\n\nEnd of backtest\nPosition open at end\nForce-closed at last price\n\n\n\n\n\nPosition Sizing\n\n$33,333 allocated per pair (dollar-neutral: ~$16,667 per leg)\n5 bps transaction cost one-way (10 bps round-trip per trade)"
+  },
+  {
+    "objectID": "index.html#results",
+    "href": "index.html#results",
+    "title": "Energy Sector Pairs Trading",
+    "section": "Results",
+    "text": "Results\n\nPerformance Summary\nFill in after running pairs_trading.ipynb\n\n\n\nMetric\nSLB/HAL\nPSX/VLO\nXOM/CVX\nPortfolio\n\n\n\n\nTotal Return\n—\n—\n—\n—\n\n\nAnn. Return\n—\n—\n—\n—\n\n\nSharpe Ratio\n—\n—\n—\n—\n\n\nMax Drawdown\n—\n—\n—\n—\n\n\nWin Rate\n—\n—\n—\n—\n\n\nAvg Hold (days)\n—\n—\n—\n—\n\n\nTotal Trades\n—\n—\n—\n—\n\n\nStop-loss Exits\n—\n—\n—\n—\n\n\nExp. Return/Trade\n—\n—\n—\n—\n\n\n\n\n\nEquity Curves\nInsert chart here after running notebook\n\n\nKalman Hedge Ratio Evolution\nInsert chart here after running notebook"
+  },
+  {
+    "objectID": "index.html#code",
+    "href": "index.html#code",
+    "title": "Energy Sector Pairs Trading",
+    "section": "Code",
+    "text": "Code\nFull source code available in the GitHub repository. The main notebook pairs_trading.ipynb connects to IBKR via ShinyBroker to fetch historical data, runs the backtest, and generates trades.csv and ledger.csv."
+  }
+]

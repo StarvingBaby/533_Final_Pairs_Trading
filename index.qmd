@@ -1,0 +1,187 @@
+---
+title: "Energy Sector Pairs Trading"
+subtitle: "Statistical arbitrage across the energy value chain — SLB/HAL · PSX/VLO · XOM/CVX"
+author: "Duke University — Fintech 533"
+date: today
+format:
+  html:
+    toc: true
+    toc-title: "Contents"
+    toc-depth: 2
+    theme: cosmo
+    code-fold: true
+    fig-align: center
+---
+
+## Overview
+
+We run a pairs trading strategy across three energy sector pairs simultaneously,
+capturing relative value dislocations within the energy industry.
+
+The three pairs span different parts of the energy value chain — all driven by
+the same macro environment (oil prices, energy demand, capex cycles) but
+reacting differently in the short term, creating tradeable spreads.
+
+| Pair | Sub-sector | Economic link |
+|------|-----------|---------------|
+| **SLB / HAL** | Oilfield Services | Both serve upstream drillers; revenue tracks rig counts |
+| **PSX / VLO** | Refining | Both earn on crack spread; same input/output |
+| **XOM / CVX** | Integrated Majors | Largest US oil majors; same macro exposure |
+
+**Formation period:** 2024-03-01 → 2025-03-01  
+**Backtest period:** 2025-03-01 → 2026-03-26  
+**Capital:** $100,000 split equally across 3 pairs ($33,333 each)
+
+---
+
+## Pair Selection & Rationale
+
+All three pairs share a core thesis: companies in the same sub-sector of energy
+are exposed to the same macro drivers, so short-term price dislocations between
+them tend to revert.
+
+**SLB / HAL** — Schlumberger and Halliburton are the two largest oilfield
+services companies globally. Both provide drilling, completion, and reservoir
+services to the same customers. When one temporarily outperforms the other,
+competitive dynamics pull the spread back.
+
+**PSX / VLO** — Phillips 66 and Valero are pure-play refiners. Their margins
+are entirely driven by the crack spread — the difference between crude oil input
+cost and refined product prices. Same input, same output, same margin driver.
+
+**XOM / CVX** — ExxonMobil and Chevron are the two largest US integrated oil
+majors. Both produce, refine, and sell oil and gas globally. Their relative
+valuation is driven by capital allocation and dividend policy, making the spread
+mean-reverting over medium horizons.
+
+---
+
+## Statistical Validation
+
+Cointegration was tested on the **formation period only** (2024-03-01 to
+2025-03-01) — the data available before going live on March 1 2025.
+No backtest data was used in parameter estimation.
+
+| Pair | Correlation | EG p-value | ADF p-value | Hedge Ratio β | R² |
+|------|------------|-----------|------------|--------------|-----|
+| SLB/HAL | — | — | — | — | — |
+| PSX/VLO | — | — | — | — | — |
+| XOM/CVX | — | — | — | — | — |
+
+*Fill in after running pairs_trading.ipynb*
+
+---
+
+## Strategy Design
+
+### Kalman Filter — Dynamic Hedge Ratio
+
+Unlike a simple OLS approach, we use a **Kalman filter** to update the hedge
+ratio every trading day. This lets the strategy adapt as the relative valuation
+between the two companies shifts over time.
+
+The filter treats the hedge ratio as a hidden state that evolves slowly,
+controlled by a process noise parameter `delta = 1e-4`. The filter is warmed up
+on the formation period before the backtest begins.
+
+### Entry Rules
+
+- **Long spread** (long A, short B): z-score drops below **−2.0**
+- **Short spread** (short A, long B): z-score rises above **+2.0**
+
+We chose ±2.0 because it is wide enough to filter out daily noise but still
+occurs frequently enough to generate meaningful trades over a year-long backtest.
+
+### Exit Rules
+
+| Fate | Trigger | Interpretation |
+|------|---------|---------------|
+| **Mean reversion** | z-score crosses 0 | Spread returned to equilibrium |
+| **Stop-loss** | \|z-score\| > 4.0 | Spread kept moving against us — cut loss |
+| **End of backtest** | Position open at end | Force-closed at last price |
+
+### Position Sizing
+
+- $33,333 allocated per pair (dollar-neutral: ~$16,667 per leg)
+- 5 bps transaction cost one-way (10 bps round-trip per trade)
+
+---
+
+## Results
+
+### Performance Summary
+
+*Fill in after running pairs_trading.ipynb*
+
+| Metric | SLB/HAL | PSX/VLO | XOM/CVX | Portfolio |
+|--------|---------|---------|---------|-----------|
+| Total Return | — | — | — | — |
+| Ann. Return | — | — | — | — |
+| Sharpe Ratio | — | — | — | — |
+| Max Drawdown | — | — | — | — |
+| Win Rate | — | — | — | — |
+| Avg Hold (days) | — | — | — | — |
+| Total Trades | — | — | — | — |
+| Stop-loss Exits | — | — | — | — |
+| Exp. Return/Trade | — | — | — | — |
+
+### Equity Curves
+
+*Insert chart here after running notebook*
+
+### Kalman Hedge Ratio Evolution
+
+*Insert chart here after running notebook*
+
+---
+
+## Trade Log
+
+*Fill in after running pairs_trading.ipynb*
+
+| Pair | Open | Close | Direction | Entry Z | Exit Z | Days | Net Return | Fate |
+|------|------|-------|-----------|---------|--------|------|-----------|------|
+| — | — | — | — | — | — | — | — | — |
+
+---
+
+## Strategy Health Monitoring
+
+### How do we know the strategy is performing as expected?
+
+We track the **rolling 60-day Sharpe ratio**. If it drops significantly below
+the backtest Sharpe, that signals underperformance. We also monitor the
+z-score distribution — if z-scores rarely cross 0, cointegration may have
+broken down.
+
+### How do we know when the strategy stops working?
+
+Two clear signals:
+
+1. **Stop-loss rate exceeds 50%** of all trades — the spread is trending against
+   us more often than not
+2. **Kalman hedge ratio drifts more than 30%** from its formation-period
+   estimate — the fundamental relationship has changed
+
+At that point we re-run the screener on a fresh formation window and either
+update the parameters or switch pairs.
+
+---
+
+## Risks
+
+- **Sector concentration:** All three pairs are in energy — a sector-wide shock
+  could blow out all three spreads simultaneously
+- **Weak cointegration:** XOM/CVX did not pass strict 5% tests — highest-risk pair
+- **Kalman overfitting:** If `delta` is too high, the filter chases noise
+- **Small sample:** ~12 months of backtest limits statistical significance
+
+---
+
+## Code
+
+Full source code available in the
+[GitHub repository](https://github.com).
+The main notebook `pairs_trading.ipynb` connects to IBKR via ShinyBroker
+to fetch historical data, runs the backtest, and generates `trades.csv` and
+`ledger.csv`.
